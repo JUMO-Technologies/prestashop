@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_sale_integration_form" model="ir.ui.view">
+            <field name="name">sale.integration.form</field>
+            <field name="model">sale.integration</field>
+            <field name="arch" type="xml">
+                <form string="Sale Integration">
+                    <header>
+                        <button name="action_active"
+                                type="object"
+                                string="Active"
+                                class="btn-primary"
+                                attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+
+                        <button name="action_draft"
+                                type="object"
+                                string="Back to Draft"
+                                class="btn-primary"
+                                attrs="{'invisible': [('state', 'not in', ['active'])]}"/>
+
+                        <button name="action_check_connection"
+                                type="object"
+                                string="Check Connection"/>
+
+                        <field name="state"
+                               widget="statusbar"
+                               statusbar_visible="draft,active"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title oe_left">
+                            <h1 class="oe_inline">
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <notebook colspan="4">
+                            <page string="Settings">
+                                <group name="settings">
+                                    <field name="type_api" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                                    <field name="company_id" groups="base.group_multi_company"/>
+                                    <field name="sale_order_auto_confirm"/>
+                                    <field name="last_receive_orders_datetime"/>
+                                    <field name="field_ids"/>
+                                </group>
+                            </page>
+                            <page string="Sale Order Defaults">
+                                <group>
+                                    <group>
+                                        <field name="order_name_ref" />
+                                        <field name="default_sales_team_id" />
+                                        <field name="so_delivery_note_field" />
+                                        <field name="picking_delivery_note_field" />
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Customer Defaults">
+                                <group>
+                                    <group>
+                                        <field name="customer_personal_id_field" />
+                                        <field name="customer_company_vat_field" />
+                                        <field name="customer_company_vat_field_name" invisible="1"/>
+                                    </group>
+                                </group>
+                                <group col="1" attrs="{'invisible': [('customer_company_vat_field_name', '!=', 'vat')]}">
+                                            <span class="badge badge-warning">IMPORTANT!</span>
+                                            <span>
+                                                You have selected VAT field for Company Registration Number synchronization.
+                                                If you have module "VAT Number Validation" installed, than Odoo will accept ONLY
+                                                valid EU VAT numbers. If they are not valid - Sales Order will not be created!!
+                                            </span>
+                                </group>
+                            </page>
+                            <page string="Inventory">
+                                <group string="Inventory Locations" col="1">
+                                    <p>
+                                        Inventory which using for export inventory.
+                                    </p>
+                                    <field name="location_ids" nolabel="1">
+                                        <tree>
+                                            <field name="display_name"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Testing">
+                                <group name="main_testing_fields">
+                                    <field name="test_method" />
+                                    <button
+                                        name="test_job"
+                                        string="Test"
+                                        type="object"
+                                        context="{'is_button': True}"
+                                    />
+                                </group>
+                            </page>
+                            <page string="Jobs">
+                                <group>
+                                    <field name="export_template_job_enabled"/>
+                                    <field name="export_inventory_job_enabled"/>
+                                    <field name="export_tracking_job_enabled"/>
+                                    <field name="export_sale_order_status_job_enabled"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sale_integration_list" model="ir.ui.view">
+            <field name="name">sale.integration.list</field>
+            <field name="model">sale.integration</field>
+            <field name="arch" type="xml">
+                <tree string="Sale Integrations">
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="integrations_list_action">
+            <field name="name">Sale Integration</field>
+            <field name="res_model">sale.integration</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_sale_integration_list"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Please create your first Sale Integration</p>
+            </field>
+        </record>
+
+        <record id="model_sale_integration_link_all_products" model="ir.actions.server">
+            <field name="name">Link All Products</field>
+            <field name="model_id" ref="integration.model_sale_integration"/>
+            <field name="binding_model_id" ref="integration.model_sale_integration"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.trigger_link_all()</field>
+        </record>
+
+        <record id="model_sale_integration_unlink_all_products" model="ir.actions.server">
+            <field name="name">Unlink All Products</field>
+            <field name="model_id" ref="integration.model_sale_integration"/>
+            <field name="binding_model_id" ref="integration.model_sale_integration"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.trigger_unlink_all()</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_sale_integration"
+                  groups="group_integration_manager"
+                  web_icon="integration,static/description/icon.png"
+                  name="e-Commerce Integration"/>
+
+        <menuitem id="integrations_menu"
+                  name="Integrations"
+                  parent="menu_sale_integration"
+                  action="integrations_list_action"
+                  sequence="1"/>
+
+        <menuitem id="input_file_menu"
+                  name="Sales Raw Data"
+                  parent="menu_sale_integration"
+                  action="input_files_list_action"
+                  sequence="3"/>
+
+    </data>
+</odoo>

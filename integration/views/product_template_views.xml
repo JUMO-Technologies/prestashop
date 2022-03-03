@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="model_product_template_action_force_export_to_external" model="ir.actions.server">
+        <field name="name">Force Export To External</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.trigger_export(export_images=True)</field>
+    </record>
+
+    <record model="ir.ui.view" id="product_template_form_view">
+        <field name="name">product.template</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales']" position="after">
+                <page name="shop" string="eCommerce Integration" attrs="{'invisible': [('sale_ok', '=', False)]}">
+                    <group name="shop_group">
+                        <group name="integrations" string="Sales Integrations">
+                            <field name="integration_ids" widget="many2many_checkboxes"/>
+                        </group>
+                        <group name="shop">
+                            <group string="Shop">
+                                <field name="default_public_categ_id"/>
+                                <field name="public_categ_ids" widget="many2many_tags" string="Categories"/>
+                            </group>
+                        </group>
+
+                        <group string="SEO">
+                            <field name="website_seo_metatitle"/>
+                            <field name="website_seo_description"/>
+                        </group>
+                    </group>
+
+                    <group string="Product Name">
+                        <field name="website_product_name" nolabel="1"/>
+                    </group>
+
+                    <group string="Short Description">
+                        <field name="website_short_description" nolabel="1"/>
+                    </group>
+
+                    <group string="Description">
+                        <field name="website_description" nolabel="1"/>
+                    </group>
+
+                    <group name="product_template_images" string="Extra Product Media">
+                        <field name="product_template_image_ids" class="o_website_sale_image_list" context="{'default_name': name}" mode="kanban" options="{'create_text':'Add a Media'}" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

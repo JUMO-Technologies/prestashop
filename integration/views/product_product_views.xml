@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_product_view_form_easy_inherit_website_sale" model="ir.ui.view">
+        <field name="name">product.product</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+        <field name="arch" type="xml">
+            <sheet position="inside">
+                <group name="product_variant_images" string="Extra Variant Media">
+                    <field name="product_variant_image_ids"
+                           class="o_website_sale_image_list"
+                           context="{'default_name': name}"
+                           mode="kanban"
+                           options="{'create_text':'Add a Media'}" nolabel="1"/>
+                </group>
+            </sheet>
+        </field>
+    </record>
+
+</odoo>
