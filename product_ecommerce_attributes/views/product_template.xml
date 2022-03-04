@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="product_template_form_view">
+        <field name="name">product.template</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales']" position="after">
+                <page name="shop" string="eCommerce" attrs="{'invisible': [('sale_ok', '=', False)]}">
+                    <group name="shop_group">
+                        <group name="shop">
+                            <group string="Shop">
+                                <field name="public_categ_ids" widget="many2many_tags" string="Categories"/>
+                            </group>
+                        </group>
+
+                        <group string="SEO">
+                            <field name="website_seo_metatitle"/>
+                            <field name="website_seo_description"/>
+                        </group>
+                    </group>
+
+                    <group string="Product Name">
+                        <field name="website_product_name" nolabel="1"/>
+                    </group>
+
+                    <group string="Short Description">
+                        <field name="website_short_description" nolabel="1"/>
+                    </group>
+                    
+                    <group string="Description">
+                        <field name="website_description" nolabel="1"/>
+                    </group>
+
+                    <group name="product_template_images" string="Extra Product Media">
+                        <field name="product_template_image_ids" class="o_website_sale_image_list" context="{'default_name': name}" mode="kanban" options="{'create_text':'Add a Media'}" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
